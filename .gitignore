@@ -1,1 +1,9 @@
 */__pycache__
+*.ko
+*.cmd
+*.mod.c
+*.mod.o
+*.mod
+*.o
+*.order
+*.symvers

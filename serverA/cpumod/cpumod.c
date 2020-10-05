@@ -38,7 +38,7 @@ static int my_proc_show(struct seq_file *m, void *v) {
 		cpu /= 2;
 	}
 
-	seq_print(m, "%lu", total);
+	seq_printf(m, "%lu", total);
 	return 0;
 }
 

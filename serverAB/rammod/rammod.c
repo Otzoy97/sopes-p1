@@ -11,19 +11,26 @@
 
 #include <linux/kernel_stat.h>
 #include <linux/list.h>
+#include <linux/blkdev.h> 
+#include <linux/cpumask.h> 
+
+#define CUATRO 4
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("S. Otzoy");
 MODULE_DESCRIPTION("Modulo para obtener el uso de RAM");
-MODULE_VERSION("0.10");
+MODULE_VERSION("0.11");
 
 static int my_proc_show(struct seq_file *m, void *v) {
 	unsigned long total, free, buffer, cached;
+	unsigned long fpags;
+	unsigned long swapcachepags;
+	int i;
 	struct list_head *all_bdevs = (struct list_head *)0xffffffff81c3f540;
 	struct address_space *my_swapper_spaces = (struct address_space *)0xffffffff81c3b440;
 
 	//Memoria-total
-	total = totalram_pages*4;
+	total = totalram_pages*CUATRO;
 	//Memoria-free
 	free = (*((unsigned long *)vm_stat+NR_FREE_PAGES))*4;
 	//Memoria-buffer
@@ -34,12 +41,9 @@ static int my_proc_show(struct seq_file *m, void *v) {
 	}
 	buffer *= 4;
 	//Memoria-cache
-	unsigned long fpags;
-	unsigned long swapcachepags;
-	
 	fpags = *((unsigned long *)vm_stat+NR_FILE_PAGES);
 	swapcachepags = 0;
-	for (int i = 0; i < MAX_SWAPFILES; i++){
+	for (i = 0; i < MAX_SWAPFILES; i++){
 		swapcachepags += my_swapper_spaces[i].nrpages;
 	}
 	cached = (fpags-swapcachepags)*4-buffer;

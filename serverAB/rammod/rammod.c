@@ -8,6 +8,7 @@
 #include <linux/mm.h>
 #include <linux/mmzone.h>
 #include <linux/swap.h>
+#include <linux/swapops.h>
 
 #include <linux/kernel_stat.h>
 #include <linux/list.h>
@@ -23,36 +24,16 @@
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("S. Otzoy");
 MODULE_DESCRIPTION("Modulo para obtener el uso de RAM");
-MODULE_VERSION("0.20");
+MODULE_VERSION("0.21");
 
 static int my_proc_show(struct seq_file *m, void *v) {
 	long cached;
 	struct sysinfo info;
 
-	si_meminfo(&i);
+	si_meminfo(&info);
 
-	unsigned int i, j, nr;
-	unsigned long total_swapcache_pages = 0;
+	cached = global_node_page_state(NR_FILE_PAGES) - total_swapcache_pages() -info.bufferram;
 
-	struct adress_space *spaces;
-	struct swap_info_struct *si;
-
-	for (i = 0; i < MAX_SWAPFILES; i++){
-		swp_entry_t entry = swp_entry(i, 1);
-
-		if(!swp_swap_info(entry))
-			continue;
-		si = get_swap_device(entry);
-		if (!si)
-			continue;
-		nr = nr_swapper_spaces[i];
-		spaces = swapper_spaces[i];
-		for (j = 0; j < nr; j++)
-			total_swapcache_pages += spaces[j].nrpages;
-		put_swap_device(si);
-	}
-
-	cached = global_node_page_state(NR_FILE_PAGES) - total_swapcache_pages - info.bufferram;
 	if (cached < 0)
 		cached = 0;
 

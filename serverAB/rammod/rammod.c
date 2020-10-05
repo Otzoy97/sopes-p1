@@ -6,30 +6,32 @@
 #include <linux/proc_fs.h>
 #include <linux/seq_file.h>
 #include <linux/mm.h>
+#include <linux/mmzone.h>
 #include <linux/swap.h>
 
-#include <linux/vmstat.h>
-#include <linux/vmalloc.h>
-#include <linux/mmzone.h>
-#include <linux/mman.h>
+#include <linux/kernel_stat.h>
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("S. Otzoy");
 MODULE_DESCRIPTION("Modulo para obtener el uso de RAM");
-MODULE_VERSION("0.02");
+MODULE_VERSION("0.05");
 
 static int my_proc_show(struct seq_file *m, void *v) {
     struct sysinfo i;
-	long cached;
+
+    unsigned long cached;
+    unsigned long file_pages;
+    unsigned long swapcaache_pages;
+
+    int i;
+    file_pages = *((unsigned long *) vm_stat+NR_FILE_PAGES);
+
+    swapcaache_pages = 0;
+    for (i = 0; i < MAX_SWAPFILES; i++) {
+        swapcaache_pages += my_swapper_spaces[i].nrpages;
+    }
 
     si_meminfo(&i);
-    si_swapinfo(&i);
-
-	cached  = global_node_page_state(NR_FILE_PAGES) - total_swapcache_pages() - i.bufferram;
-    
-    if (cached < 0){
-        cached = 0;
-    }
 
 	seq_printf(m, "%lu\n%lu\n%lu\n%ld", i.totalram, i.freeram, i.bufferram, cached);
 	return 0;

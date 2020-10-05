@@ -27,7 +27,7 @@ MODULE_VERSION("0.20");
 
 static int my_proc_show(struct seq_file *m, void *v) {
 	long cached;
-	struct sysinfo i;
+	struct sysinfo info;
 
 	si_meminfo(&i);
 
@@ -52,7 +52,7 @@ static int my_proc_show(struct seq_file *m, void *v) {
 		put_swap_device(si);
 	}
 
-	cached = global_node_page_state(NR_FILE_PAGES) - total_swapcache_pages - i.bufferram;
+	cached = global_node_page_state(NR_FILE_PAGES) - total_swapcache_pages - info.bufferram;
 	if (cached < 0)
 		cached = 0;
 
@@ -85,7 +85,7 @@ static int my_proc_show(struct seq_file *m, void *v) {
 	// }
 	// cached = (fpags-swapcachepags)*4-buffer;
 
-	seq_printf(m, "%lu\n%lu\n%lu\n%lu", i.totalram << (PAGE_SHIFT - 10), i.freeram, i.bufferram, cached);
+	seq_printf(m, "%lu\n%lu\n%lu\n%lu", info.totalram << (PAGE_SHIFT - 10), info.freeram, info.bufferram, cached);
 	return 0;
 }
 

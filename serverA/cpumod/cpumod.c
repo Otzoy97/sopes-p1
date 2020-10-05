@@ -14,31 +14,34 @@
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Sergio Otzoy");
 MODULE_DESCRIPTION("Modulo para obtener uso de CPU");
-MODULE_VERSION("0.01");
+MODULE_VERSION("0.02");
 	
 static int my_proc_show(struct seq_file *m, void *v) {
 	unsigned long cpu = *((unsigned long*) cpu_possible_mask->bits);
 	unsigned long total = 0;
+	unsigned long idle = 0;
 	struct kernel_cpustat *info = NULL;
 
 	int idx = 0;
 	while(cpu) {
 		info = (struct kernel_cpustat*) ((unsigned long) __per_cpu_offset[idx]+(unsigned long)&kernel_cpustat);
 
+		total += info->cpustat[CPUTIME_USER];
 		total += info->cpustat[CPUTIME_NICE];
 		total += info->cpustat[CPUTIME_SYSTEM];
-		total += info->cpustat[CPUTIME_SOFTIRQ];
-		total += info->cpustat[CPUTIME_IRQ];
 		total += info->cpustat[CPUTIME_IDLE];
 		total += info->cpustat[CPUTIME_IOWAIT];
+		total += info->cpustat[CPUTIME_IRQ];
+		total += info->cpustat[CPUTIME_SOFTIRQ];
 		total += info->cpustat[CPUTIME_STEAL];
-		total += info->cpustat[CPUTIME_GUEST];
-		total += info->cpustat[CPUTIME_GUEST_NICE];
 		
+		idle += info->cpustat[CPUTIME_IDLE];
+		idle += info->cpustat[CPUTIME_IOWAIT];
+
 		cpu /= 2;
 	}
 
-	seq_printf(m, "%lu", total);
+	seq_printf(m, "%lu\n%lu", total, idle);
 	return 0;
 }
 

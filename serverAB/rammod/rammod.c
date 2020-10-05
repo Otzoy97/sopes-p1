@@ -10,30 +10,41 @@
 #include <linux/swap.h>
 
 #include <linux/kernel_stat.h>
+#include <linux/list.h>
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("S. Otzoy");
 MODULE_DESCRIPTION("Modulo para obtener el uso de RAM");
-MODULE_VERSION("0.05");
+MODULE_VERSION("0.10");
 
 static int my_proc_show(struct seq_file *m, void *v) {
-    struct sysinfo i;
+	unsigned long total, free, buffer, cached;
+	struct list_head *all_bdevs = (struct list_head *)0xffffffff81c3f540;
+	struct address_space *my_swapper_spaces = (struct address_space *)0xffffffff81c3b440;
 
-    unsigned long cached;
-    unsigned long file_pages;
-    unsigned long swapcaache_pages;
+	//Memoria-total
+	total = totalram_pages*4;
+	//Memoria-free
+	free = (*((unsigned long *)vm_stat+NR_FREE_PAGES))*4;
+	//Memoria-buffer
+	buffer = 0;
+	struct block_device *dv;
+	list_for_each_entry(dv, all_bdevs, bd_list) {
+		buffer += dv->bd_inode->i_mapping->nrpages;
+	}
+	buffer *= 4;
+	//Memoria-cache
+	unsigned long fpags;
+	unsigned long swapcachepags;
+	
+	fpags = *((unsigned long *)vm_stat+NR_FILE_PAGES);
+	swapcachepags = 0;
+	for (int i = 0; i < MAX_SWAPFILES; i++){
+		swapcachepags += my_swapper_spaces[i].nrpages;
+	}
+	cached = (fpags-swapcachepags)*4-buffer;
 
-    int i;
-    file_pages = *((unsigned long *) vm_stat+NR_FILE_PAGES);
-
-    swapcaache_pages = 0;
-    for (i = 0; i < MAX_SWAPFILES; i++) {
-        swapcaache_pages += my_swapper_spaces[i].nrpages;
-    }
-
-    si_meminfo(&i);
-
-	seq_printf(m, "%lu\n%lu\n%lu\n%ld", i.totalram, i.freeram, i.bufferram, cached);
+	seq_printf(m, "%lu\n%lu\n%lu\n%lu", total, free, buffer, cached);
 	return 0;
 }
 

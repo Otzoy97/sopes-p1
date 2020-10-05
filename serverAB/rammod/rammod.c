@@ -9,19 +9,23 @@
 #include <linux/swap.h>
 
 #include <linux/vmstat.h>
+#include <linux/vmalloc.h>
+#include <linux/mmzone.h>
+#include <linux/mman.h>
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("S. Otzoy");
 MODULE_DESCRIPTION("Modulo para obtener el uso de RAM");
-MODULE_VERSION("0.01");
+MODULE_VERSION("0.02");
 
 static int my_proc_show(struct seq_file *m, void *v) {
     struct sysinfo i;
+	long cached;
 
     si_meminfo(&i);
     si_swapinfo(&i);
 
-    long cached = global_node_page_state(NR_FILE_PAGES) - total_swapcache_pages() - i.bufferram;
+	cached  = global_node_page_state(NR_FILE_PAGES) - total_swapcache_pages() - i.bufferram;
     
     if (cached < 0){
         cached = 0;

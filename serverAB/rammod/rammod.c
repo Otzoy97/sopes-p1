@@ -19,14 +19,16 @@
 #include <asm/page.h>
 #include <asm/pgtable.h>
 
+extern unsigned long total_swapcache_pages(void);
+
 #define CUATRO 4
 #define total_swapcache_pages() 0UL
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("S. Otzoy");
 MODULE_DESCRIPTION("Modulo para obtener el uso de RAM");
-MODULE_VERSION("0.30");
+MODULE_VERSION("0.32");
 
-extern unsigned long total_swapcache_pages(void);
+
 
 static int my_proc_show(struct seq_file *m, void *v) {
 	long cached;

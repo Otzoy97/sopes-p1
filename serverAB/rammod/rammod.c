@@ -20,11 +20,13 @@
 #include <asm/pgtable.h>
 
 #define CUATRO 4
-
+#define total_swapcache_pages() 0UL
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("S. Otzoy");
 MODULE_DESCRIPTION("Modulo para obtener el uso de RAM");
-MODULE_VERSION("0.23");
+MODULE_VERSION("0.30");
+
+extern unsigned long total_swapcache_pages(void);
 
 static int my_proc_show(struct seq_file *m, void *v) {
 	long cached;
@@ -32,39 +34,10 @@ static int my_proc_show(struct seq_file *m, void *v) {
 
 	si_meminfo(&info);
 
-	cached = global_node_page_state(NR_FILE_PAGES) - info.bufferram;
+	cached = global_node_page_state(NR_FILE_PAGES) - total_swapcache_pages() -info.bufferram;
 
 	if (cached < 0)
 		cached = 0;
-
-	// unsigned long total, free, buffer, cached;
-	// unsigned long fpags;
-	// unsigned long swapcachepags;
-	// int i;
-	// struct list_head *all_bdevs;
-	// struct address_space *my_swapper_spaces;
-	// struct zone *zone;
-	// *my_swapper_spaces = (struct address_space *)0xffffffff81c3b440;
-	// all_bdevs; = (struct list_head *)0xffffffff81c3f540;
-
-	// //Memoria-total
-	// total = totalram_pages*CUATRO;
-	// //Memoria-free
-	// free = (*((unsigned long *)vm_stat+NR_FREE_PAGES))*4;
-	// //Memoria-buffer
-	// buffer = 0;
-	// struct block_device *dv;
-	// list_for_each_entry(dv, all_bdevs, bd_list) {
-	// 	buffer += dv->bd_inode->i_mapping->nrpages;
-	// }
-	// buffer *= 4;
-	// //Memoria-cache
-	// fpags = *((unsigned long *)vm_stat+NR_FILE_PAGES);
-	// swapcachepags = 0;
-	// for (i = 0; i < MAX_SWAPFILES; i++){
-	// 	swapcachepags += my_swapper_spaces[i].nrpages;
-	// }
-	// cached = (fpags-swapcachepags)*4-buffer;
 
 	seq_printf(m, "%lu\n%lu\n%lu\n%lu", info.totalram << (PAGE_SHIFT - 10), info.freeram << (PAGE_SHIFT - 10), info.bufferram << (PAGE_SHIFT - 10), cached << (PAGE_SHIFT - 10));
 	return 0;

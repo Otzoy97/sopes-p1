@@ -8,3 +8,5 @@
 *.order
 *.symvers
 .vscode
+/serverAB/api/venv
+/serverAB/api/__pycache__

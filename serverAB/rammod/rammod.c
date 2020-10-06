@@ -24,7 +24,7 @@
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("S. Otzoy");
 MODULE_DESCRIPTION("Modulo para obtener el uso de RAM");
-MODULE_VERSION("0.21");
+MODULE_VERSION("0.22");
 
 static int my_proc_show(struct seq_file *m, void *v) {
 	long cached;
@@ -32,7 +32,7 @@ static int my_proc_show(struct seq_file *m, void *v) {
 
 	si_meminfo(&info);
 
-	cached = global_node_page_state(NR_FILE_PAGES) - total_swapcache_pages() -info.bufferram;
+	cached = global_node_page_state(NR_FILE_PAGES) - info.bufferram;
 
 	if (cached < 0)
 		cached = 0;

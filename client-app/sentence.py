@@ -124,8 +124,9 @@ def printSentences():
 def sendSenteces(url):
     """Envía las oraciones al servidor 1"""
     for stc in _sentences:
-        res = post(url, json=dumps(stc))
+        # hace una petición post al balanceador de carga
+        res = post(url, json=stc)
         if res.status_code != 200:
-            print(" > Ocurrió un error al enviar una oración", res.status_code)
+            print(" >",res)
         else:
             print(res.json())

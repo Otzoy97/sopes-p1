@@ -45,7 +45,7 @@ def cpuUsage():
         with codecs.open("cpumod") as f:
             info = f.read()
             info = info.split("\n")
-            return jsonify({"res": {"total": info[0], "idle": info[1]}, "ok": True})
+            return jsonify({"res": {"total": int(info[0]), "idle": int(info[1])}, "ok": True})
     except:
         return jsonify({"res": "error al abrir el archivo", "ok": False})
 
@@ -56,8 +56,8 @@ def ramUsage():
         with codecs.open("rammod") as f:
             info = f.read()
             info = info.split("\n")
-            return jsonify({"res": {"total": info[0],
-                                    "free": info[1], "buffer": info[2], "cached": info[3]}, "ok": True})
+            return jsonify({"res": {"total": int(info[0]),
+                                    "free": int(info[1]), "buffer": int(info[2]), "cached": int(info[3])}, "ok": True})
     except:
         return jsonify({"res": 'error al abrir el archivo', 'ok': False})
 

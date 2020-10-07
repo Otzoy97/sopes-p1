@@ -1,3 +1,4 @@
+import codecs
 from flask import Flask
 from flask import request
 from flask import jsonify
@@ -8,6 +9,7 @@ app.config['MONGO_DBNAME'] = 'sopes-p1'
 app.config['MONGO_URI'] = 'mongodb://admin:a12345@0.0.0.0:27017/sopes-p1'
 
 mongo = PyMongo(app)
+
 
 @app.route('/getMsgs', methods=['GET'])
 def getMessage():
@@ -31,13 +33,29 @@ def newMessage():
     output = {'autor': newMsg['autor'], 'oracion': newMsg['oracion']}
     return jsonify({'res': doc, 'ok': True})
 
+
 @app.route('/getCpu', methods=['GET'])
 def cpuUsage():
-    return jsonify({"res": '', 'ok': True})
+    try:
+        with codecs.open("cpumod") as f:
+            info = f.read()
+            info = info.split("\n")
+            return jsonify({"res": {"total": info[0], "idle": info[1]}, "ok": True})
+    except:
+        return jsonify({"res": "error al abrir el archivo", "ok": False})
+
 
 @app.route('/getRam', methods=['GET'])
 def ramUsage():
-    return jsonify({"res": '', 'ok': True})
+    try:
+        with codecs.open("rammod") as f:
+            info = f.read()
+            info = info.split("\n")
+            return jsonify({"res": {"total": info[0],
+                                    "free": info[1], "buffer": info[2], "cached": info[3]}})
+    except:
+        return jsonify({"res": 'error al abrir el archivo', 'ok': False})
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3000, debug=True)

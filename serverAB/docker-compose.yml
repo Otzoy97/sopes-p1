@@ -12,14 +12,14 @@ services:
             - ./api:/api
             - /proc/cpumod:/api/cpumod
             - /proc/rammod:/api/rammod
-        logging:
-            driver: none
+        # logging:
+        #     driver: none
     mongo:
         container_name: mongo-db
         image: mongo
         restart: always
         environment: 
-            MONGO_INITDB_ROOT_USERAME: admin
+            MONGO_INITDB_ROOT_USERNAME: admin
             MONGO_INITDB_ROOT_PASSWORD: a12345
-        logging:
-            driver: none
+        # logging:
+        #     driver: none

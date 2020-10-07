@@ -26,9 +26,9 @@ def newMessage():
     stat = Info(infoA, infoB).toServer()
     if stat == 'A':
         res = requests.post('http://35.208.79.63/getInfo', json=doc)
-        return res
+        return res.json()
     res = requests.post('http://35.206.84.205/getInfo', json=doc)
-    return res
+    return res.json()
     
 @app.route('/')
 def info():

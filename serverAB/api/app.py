@@ -42,7 +42,7 @@ def newMessage():
 @app.route('/getInfo', methods=['GET'])
 def cpuUsage():
     try:
-        with codecs.open("cpumod") as fRam, codecs.open("rammod") as fCpu:
+        with codecs.open("cpumod") as fCpu, codecs.open("rammod") as fRam:
             #recupera la infor de ambos documentos
             infoRam = fRam.read()
             infoCpu = fCpu.read()

@@ -24,7 +24,7 @@ def getMessage():
         output.append({'autor': msg['autor'], 'oracion': msg['oracion']})
     return jsonify({'res': output, 'ok': True})
 
-@app.rout("/getCount", methods=['GET'])
+@app.route("/getCount", methods=['GET'])
 def getCount():
     msgs = mongo.db.msgs
     count = msgs.count_documents({})

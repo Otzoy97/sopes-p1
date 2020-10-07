@@ -1,8 +1,8 @@
 from fproc import makeSentences
-from sentence import printSentences
-url = ""
+from sentence import printSentences, sendSenteces
 
 def main():
+    url = "http://35.208.119.75/newMsg"
     while True :
         print("1. Ingresar ruta")
         print("2. Ingresar dirección")
@@ -20,14 +20,15 @@ def main():
             makeSentences(filePath)
         elif iUsr == "2":
             # guardar ruta del balanceador de ruta
-            url = input(" > ")
-            print(" > Dirección : ", url)
+            usrInput = input(" > ")
+            print(" > Dirección : '", usrInput, "'")
+            url = usrInput
         elif iUsr == "3":
             # revelar datos
             printSentences()
         elif iUsr == "4":
             # enviar datos
-            pass
+            sendSenteces(url)
 
 if __name__ == "__main__":
     main()

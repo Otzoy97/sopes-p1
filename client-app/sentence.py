@@ -1,5 +1,6 @@
 from random import randint
 from json import dumps
+from requests import post
 
 """lista de oraciones"""
 _sentences = []
@@ -120,3 +121,11 @@ def printSentences():
     for stc in _sentences:
         print(dumps(stc))
 
+def sendSenteces(url):
+    """Envía las oraciones al servidor 1"""
+    for stc in _sentences:
+        res = post(url, json=dumps(stc))
+        if res.status_code != 200:
+            print(" > Ocurrió un error al enviar una oración", res.status_code)
+        else:
+            print(res.json())

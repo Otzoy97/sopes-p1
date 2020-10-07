@@ -2,6 +2,6 @@ FROM python:3.6.9
 RUN pip3 install --upgrade pip
 WORKDIR /api
 COPY . .
-RUN pip3 --no-cache-dir install Flask 
+RUN pip3 --no-cache-dir install Flask requests
 CMD ["python3", "app.py"]
 EXPOSE 4000

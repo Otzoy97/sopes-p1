@@ -5,8 +5,13 @@ from flask import jsonify
 from flask_pymongo import PyMongo
 
 app = Flask(__name__)
+app.config['MONGO_HOST'] = 'mongo'
+app.config['MONGO_PORT'] = '27017'
 app.config['MONGO_DBNAME'] = 'sopes-p1'
-app.config['MONGO_URI'] = 'mongodb://admin:a12345@0.0.0.0:27017/sopes-p1'
+app.config['MONGO_USERNAME'] = 'admin'
+app.config['MONGO_PASSWORD'] = 'a12345'
+app.config['MONGO_AUTH_SOURCE'] = 'admin'
+#app.config['MONGO_URI'] = 'mongodb://admin:a12345@0.0.0.0:27017/sopes-p1'
 
 mongo = PyMongo(app)
 

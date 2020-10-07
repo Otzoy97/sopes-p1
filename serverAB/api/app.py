@@ -39,27 +39,21 @@ def newMessage():
     return jsonify({'res': output, 'ok': True})
 
 
-@app.route('/getCpu', methods=['GET'])
+@app.route('/getInfo', methods=['GET'])
 def cpuUsage():
     try:
-        with codecs.open("cpumod") as f:
-            info = f.read()
-            info = info.split("\n")
-            return jsonify({"res": {"total": int(info[0]), "idle": int(info[1])}, "ok": True})
+        with codecs.open("cpumod") as fRam, codecs.open("rammod") as fCpu:
+            #recupera la infor de ambos documentos
+            infoRam = fRam.read()
+            infoCpu = fCpu.read()
+            infoRam = infoRam.split("\n")
+            infoCpu = infoCpu.split("\n")
+
+            output = {"cpu": {"total": int(infoCpu[0]), "idle": int(infoCpu[1])}, "ram": {"total": int(infoRam[0]),
+                                                                                          "free": int(infoRam[1]), "buffer": int(infoRam[2]), "cached": int(infoRam[3])}}
+            return jsonify({"res": output, "ok": True})
     except:
         return jsonify({"res": "error al abrir el archivo", "ok": False})
-
-
-@app.route('/getRam', methods=['GET'])
-def ramUsage():
-    try:
-        with codecs.open("rammod") as f:
-            info = f.read()
-            info = info.split("\n")
-            return jsonify({"res": {"total": int(info[0]),
-                                    "free": int(info[1]), "buffer": int(info[2]), "cached": int(info[3])}, "ok": True})
-    except:
-        return jsonify({"res": 'error al abrir el archivo', 'ok': False})
 
 
 if __name__ == '__main__':

@@ -36,7 +36,7 @@ def newMessage():
     #msgId = msgs.insert({'autor': autor, 'oracion': oracion})
     #newMsg = msgs.find_one({'_id': msgId})
     output = {'autor': newMsg['autor'], 'oracion': newMsg['oracion']}
-    return jsonify({'res': doc, 'ok': True})
+    return jsonify({'res': output, 'ok': True})
 
 
 @app.route('/getCpu', methods=['GET'])
@@ -57,7 +57,7 @@ def ramUsage():
             info = f.read()
             info = info.split("\n")
             return jsonify({"res": {"total": info[0],
-                                    "free": info[1], "buffer": info[2], "cached": info[3]}})
+                                    "free": info[1], "buffer": info[2], "cached": info[3]}, "ok": True})
     except:
         return jsonify({"res": 'error al abrir el archivo', 'ok': False})
 

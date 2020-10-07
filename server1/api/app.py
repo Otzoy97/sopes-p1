@@ -26,9 +26,9 @@ def newMessage():
     stat = Info(infoA, infoB).toServer()
     if stat == 'A':
         res = requests.post('http://35.208.79.63/getInfo', json=doc)
-        return res.json()
+        return jsonify({'res':res.json()['res'], 'ok': res.json()['ok']})
     res = requests.post('http://35.206.84.205/getInfo', json=doc)
-    return res.json()
+    return jsonify({'res':res.json()['res'], 'ok': res.json()['ok']})
     
 @app.route('/')
 def info():

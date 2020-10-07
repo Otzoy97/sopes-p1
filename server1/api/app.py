@@ -26,8 +26,8 @@ def newMessage():
     cpuAUsage = (cpuA["total"] - cpuA["idle"])* (100/cpuA["total"])
     ramAUsage = (ramA["total"] - ramA["free"] - ramA["buffer"] - ramA["cached"]) * (100/ramA["total"])
     # uso de cpu/ram B
-    cpuB = infoA["cpu"]
-    ramB = infoA["ram"]
+    cpuB = infoB["cpu"]
+    ramB = infoB["ram"]
 
     cpuBUsage = (cpuB["total"] - cpuB["idle"])* (100/cpuB["total"])
     ramBUsage = (ramB["total"] - ramB["free"] - ramB["buffer"] - ramB["cached"]) * (100/ramB["total"])

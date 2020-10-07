@@ -22,7 +22,7 @@ def getMessage():
     output = []
     for msg in msgs.find({}):
         output.append({'autor': msg['autor'], 'oracion': msg['oracion']})
-    return jsonify({'res': '', 'ok': True})
+    return jsonify({'res': output, 'ok': True})
 
 
 @app.route('/newMsg', methods=['POST'])

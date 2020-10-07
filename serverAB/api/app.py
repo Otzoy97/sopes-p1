@@ -24,12 +24,6 @@ def getMessage():
         output.append({'autor': msg['autor'], 'oracion': msg['oracion']})
     return jsonify({'res': output, 'ok': True})
 
-@app.route("/getCount", methods=['GET'])
-def getCount():
-    msgs = mongo.db.msgs
-    count = msgs.count_documents({})
-    return jsonify({'res': count, 'ok': True})
-
 
 @app.route('/newMsg', methods=['POST'])
 def newMessage():
@@ -49,14 +43,14 @@ def newMessage():
 def cpuUsage():
     try:
         with codecs.open("cpumod") as fCpu, codecs.open("rammod") as fRam:
-            #recupera la infor de ambos documentos
+            # recupera la infor de ambos documentos
             infoRam = fRam.read()
             infoCpu = fCpu.read()
             infoRam = infoRam.split("\n")
             infoCpu = infoCpu.split("\n")
-
-            output = {"cpu": {"total": int(infoCpu[0]), "idle": int(infoCpu[1])}, "ram": {"total": int(infoRam[0]),
-                                                                                          "free": int(infoRam[1]), "buffer": int(infoRam[2]), "cached": int(infoRam[3])}}
+            count = mongo.db.msgs.count_documents({})
+            output = {"count": int(count), "cpu": {"total": int(infoCpu[0]), "idle": int(infoCpu[1])}, "ram": {"total": int(infoRam[0]),
+                                                                                                               "free": int(infoRam[1]), "buffer": int(infoRam[2]), "cached": int(infoRam[3])}}
             return jsonify({"res": output, "ok": True})
     except:
         return jsonify({"res": "error al abrir el archivo", "ok": False})

@@ -3,5 +3,6 @@ RUN pip3 install --upgrade pip
 WORKDIR /api
 COPY . .
 RUN pip3 --no-cache-dir install Flask requests
+VOLUME ../../../txt:/api/txt
 CMD ["python3", "app.py"]
 EXPOSE 4000

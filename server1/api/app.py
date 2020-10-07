@@ -3,6 +3,7 @@ from flask import jsonify
 from flask import request
 from info import Info
 import requests
+import codecs
 
 
 app = Flask(__name__)
@@ -31,7 +32,12 @@ def newMessage():
     
 @app.route('/')
 def info():
-    return jsonify({"res": {'carné': 201602782, "nombre": "Sergio Fernando Otzoy Gonzalez"}, "ok": True})
+    try:
+        with codecs.open("txt") as f:
+            txt = f.read()
+            return jsonify({"res":  {'carné': 201602782, "nombre": "Sergio Fernando Otzoy Gonzalez", "server": txt}, "ok": True})
+    except:
+        return jsonify({"res": "", "ok": False})
 
 
 if __name__ == '__main__':

@@ -5,7 +5,7 @@ from flask_pymongo import PyMongo
 
 app = Flask(__name__)
 app.config['MONGO_DBNAME'] = 'sopes-p1'
-app.config['MONGO_URI'] = 'mongodb://localhost:27017/sopes-p1'
+app.config['MONGO_URI'] = 'mongodb://0.0.0.0:27017/sopes-p1'
 
 mongo = PyMongo(app)
 
@@ -15,14 +15,13 @@ def getMessage():
     output = []
     for msg in msgs.find({}):
         output.append({'autor': msg['autor'], 'oracion': msg['oracion']})
-    return jsonify({'res': output})
+    return jsonify({'res': '', 'ok': True})
 
 
 @app.route('/newMsg', methods=['POST'])
 def newMessage():
     msgs = mongo.db.msgs
     doc = request.get_json(force=True)
-    print(doc)
     msgId = msgs.insert(doc)
     newMsg = msgs.find_one({'_id': msgId})
     #autor = request.json['autor']
@@ -30,12 +29,15 @@ def newMessage():
     #msgId = msgs.insert({'autor': autor, 'oracion': oracion})
     #newMsg = msgs.find_one({'_id': msgId})
     output = {'autor': newMsg['autor'], 'oracion': newMsg['oracion']}
-    return jsonify({'res': newMsg})
+    return jsonify({'res': doc, 'ok': True})
 
 @app.route('/getCpu', methods=['GET'])
 def cpuUsage():
-    pass
+    return jsonify({"res": '', 'ok': True})
 
-@app.route('getRam', methods=['GET'])
+@app.route('/getRam', methods=['GET'])
 def ramUsage():
-    pass
+    return jsonify({"res": '', 'ok': True})
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=3000, debug=True)

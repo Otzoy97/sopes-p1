@@ -1,0 +1,25 @@
+version: "3"
+services:
+    api:
+        container_name: api-python
+        restart: always
+        build: ./api
+        ports:
+            - "80:3000"
+        links:
+            - mongo
+        volumes:
+            - ./api:/api
+            - /proc/cpumod:/api/cpumod
+            - /proc/rammod:/api/rammod
+        logging:
+            driver: none
+    mongo:
+        container_name: mongo-db
+        image: mongo
+        restart: always
+        environment: 
+            MONGO_INITDB_ROOT_USERAME: admin
+            MONGO_INITDB_ROOT_PASSWORD: a12345
+        logging:
+            driver: none

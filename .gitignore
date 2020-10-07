@@ -10,3 +10,5 @@
 .vscode
 /serverAB/api/venv
 /serverAB/api/__pycache__
+/server1/api/venv
+/server1/api/__pycache__

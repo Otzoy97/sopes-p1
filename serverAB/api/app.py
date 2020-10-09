@@ -42,7 +42,6 @@ def newMessage():
 
 
 @app.route('/getInfo', methods=['GET'])
-@cross_origin()
 def cpuUsage():
     try:
         with codecs.open("cpumod") as fCpu, codecs.open("rammod") as fRam:

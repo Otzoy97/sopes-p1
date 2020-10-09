@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Message = ({ title, paragraph }) => {
+const Message = ({ title, paragraph }) => (
     <div className="row">
         <div className="col">
             <div className="card">
@@ -11,6 +11,6 @@ const Message = ({ title, paragraph }) => {
             </div>
         </div>
     </div>
-}
+)
 
 export default Message

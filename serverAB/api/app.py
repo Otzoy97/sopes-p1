@@ -16,8 +16,9 @@ app.config['MONGO_URI'] = 'mongodb://admin:a12345@mongo:27017/sopes-p1?authSourc
 
 mongo = PyMongo(app)
 
+CORS(app)
+
 @app.route('/getMsgs', methods=['GET'])
-@cross_origin()
 def getMessage():
     msgs = mongo.db.msgs
     output = []

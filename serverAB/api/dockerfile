@@ -3,5 +3,6 @@ RUN pip3 install --upgrade pip
 WORKDIR /api
 COPY . .
 RUN pip3 --no-cache-dir install Flask Flask-PyMongo
+RUN pip3 --no-cache-dir install -U flask-cors
 CMD ["python3", "app.py"]
 EXPOSE 3000

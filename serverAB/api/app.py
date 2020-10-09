@@ -3,6 +3,7 @@ from flask import Flask
 from flask import request
 from flask import jsonify
 from flask_pymongo import PyMongo
+from flask_cors import CORS
 
 app = Flask(__name__)
 #app.config['MONGO_HOST'] = 'mongo'
@@ -15,8 +16,8 @@ app.config['MONGO_URI'] = 'mongodb://admin:a12345@mongo:27017/sopes-p1?authSourc
 
 mongo = PyMongo(app)
 
-
 @app.route('/getMsgs', methods=['GET'])
+@cross_origin()
 def getMessage():
     msgs = mongo.db.msgs
     output = []
@@ -40,6 +41,7 @@ def newMessage():
 
 
 @app.route('/getInfo', methods=['GET'])
+@cross_origin()
 def cpuUsage():
     try:
         with codecs.open("cpumod") as fCpu, codecs.open("rammod") as fRam:

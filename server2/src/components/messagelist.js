@@ -1,19 +1,14 @@
 import React from 'react'
 import Message from './message'
 
-const MessageList = ({msgs}) => {
+function MessageList(props) {
     return (
-        <div className="row">
-            <div className="col">
-                {msgs.map((msg) => {
-                    return (
-                        <Message title={msg.autor}
-                            paragraph={msg.oracion} />
-                    )
-                })}
-            </div>
-
-        </div>
+        props.data.map((msg, idx) => {
+            return (
+                <Message key={idx} title={msg.autor}
+                    paragraph={msg.oracion} />
+            )
+        })
     )
 }
 

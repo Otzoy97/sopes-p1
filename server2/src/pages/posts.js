@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import MessageList from '../components/messagelist'
-import {serverA, serverB} from '../config'
+import { serverA, serverB } from '../config'
 
 class Posts extends React.Component {
 
@@ -14,7 +14,8 @@ class Posts extends React.Component {
             },
             serverB: {
                 button: "dropdown-item"
-            }
+            },
+            msgs: []
         }
     }
 
@@ -22,11 +23,12 @@ class Posts extends React.Component {
         this.bindMessages(serverA + '/getMsgs')
     }
 
-    bindMessages = async(url) =>{
-        let res = await fetch(url, {method:'GET'})
-        console.log(res)
-        let data = await  res.json()
-        console.log(data)         
+    bindMessages = async (url) => {
+        let res = await fetch(url, { method: 'GET' })
+        let data = await res.json()
+        this.setState({
+            msgs: data.res
+        })
     }
 
     handleClickA = () => {
@@ -38,9 +40,10 @@ class Posts extends React.Component {
                 button: "dropdown-item active"
             }
         })
+        this.bindMessages(serverA + '/getMsgs')
     }
 
-    handleClickB= () => {
+    handleClickB = () => {
         this.setState({
             serverA: {
                 button: "dropdown-item"
@@ -49,12 +52,13 @@ class Posts extends React.Component {
                 button: "dropdown-item active"
             }
         })
+        this.bindMessages(serverB + '/getMsgs')
     }
 
     render() {
         return (
             <Fragment>
-                <div className="row align-items-center justify-content-between">
+                <div className="row align-items-center justify-content-between mt-2">
                     <div className="col-auto mr-auto">
                         <h1>Publicaciones</h1>
                     </div>
@@ -70,7 +74,7 @@ class Posts extends React.Component {
                         </div>
                     </div>
                 </div>
-                {/* <MessageList data = {this.state.msgs} /> */}
+                <MessageList data={this.state.msgs} />
             </Fragment>
         )
     }
